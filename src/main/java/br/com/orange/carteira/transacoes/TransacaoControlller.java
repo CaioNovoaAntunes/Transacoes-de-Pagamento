@@ -7,21 +7,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/transacao")
 public class TransacaoControlller {
 
-    private final TransacaoRepository transacaoRepository;
+    private  TransacaoRepository transacaoRepository;
     private final CartaoRepository cartaoRepository;
     private final ValidCard validCard;
     private final Logger logger = LoggerFactory.getLogger(TransacaoControlller.class);
@@ -58,4 +56,24 @@ public class TransacaoControlller {
 
         return ResponseEntity.created(uri).build();
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> deleta(@PathVariable("id") Long id) {
+        transacaoRepository.deleteById(id);
+    return ResponseEntity.ok().build();
+    }
+
+
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> atualiza(@PathVariable("id") Long id, @RequestBody AtualizaTransacaoRequest atualizaTransacaoRequest) {
+        Transacao transacao =  transacaoRepository.getOne(id);
+
+        transacao.atualizaEstabelecimento(atualizaTransacaoRequest);
+        transacaoRepository.save(transacao);
+        return ResponseEntity.ok().build();
+    }
+
 }

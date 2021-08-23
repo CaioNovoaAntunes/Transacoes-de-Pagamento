@@ -26,20 +26,16 @@ public class CheckIfExistsValidator implements ConstraintValidator<CheckIfExist,
     }
 
 
-
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
 
-        if(value != null ) {
-            List<?> resultList = entityManager.createQuery("SELECT 1 FROM " + klazz.getSimpleName() + " WHERE " +
-                    field + " = :valor")
-                    .setParameter("valor", value).getResultList();
+        List<?> resultList = entityManager.createQuery("SELECT 1 FROM " + klazz.getSimpleName() + " WHERE " +
+                field + " = :valor")
+                .setParameter("valor", value).getResultList();
 
-            Assert.state(resultList.size() <= 1, "O campo " + field + " tem um valor");
+        Assert.state(resultList.size() <= 1, "O campo " + field + " tem um valor");
 
-            return !resultList.isEmpty();
-        }
-
-        return true;
+        return !resultList.isEmpty();
     }
+
 }

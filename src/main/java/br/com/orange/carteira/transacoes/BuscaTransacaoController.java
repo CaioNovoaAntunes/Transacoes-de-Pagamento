@@ -29,6 +29,8 @@ public class BuscaTransacaoController {
             return ResponseEntity.notFound().build();
         }
 
+
+
         return ResponseEntity.ok().body(new BuscaTransacaoResponse(possivelTransacao.get()));
     }
 }

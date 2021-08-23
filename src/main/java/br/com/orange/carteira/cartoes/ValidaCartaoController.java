@@ -15,7 +15,7 @@ public class ValidaCartaoController {
     public ResponseEntity<?> validaCartao(@PathVariable String id) {
 
         if(id.startsWith("3")){
-         throw new RuntimeException("erro no get do feign");
+         throw new RuntimeException("cartao sem saldo");
         }
 
         return ResponseEntity.ok().build();
