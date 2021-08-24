@@ -2,6 +2,7 @@ package br.com.orange.carteira.transacoes;
 
 
 import br.com.orange.carteira.cartoes.Cartao;
+import br.com.orange.carteira.estabelecimentos.NovoEstabelecimento;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,8 +15,9 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String estabelecimento;
+
+    @ManyToOne
+    private NovoEstabelecimento estabelecimento;
 
     @ManyToOne
     private Cartao cartao;
@@ -26,13 +28,13 @@ public class Transacao {
     @Column(nullable = false, updatable = false)
     private LocalDateTime instante = LocalDateTime.now();
 
-    public Transacao(String estabelecimento, Cartao cartao, Double valorproduto) {
+    public Transacao(NovoEstabelecimento estabelecimento, Cartao cartao, Double valorproduto) {
         this.estabelecimento = estabelecimento;
         this.cartao = cartao;
         this.valorproduto = valorproduto;
     }
 
-    public Transacao(String estabelecimento) {
+    public Transacao(NovoEstabelecimento estabelecimento) {
         this.estabelecimento = estabelecimento;
     }
 
@@ -45,9 +47,7 @@ public class Transacao {
         return id;
     }
 
-    public String getEstabelecimento() {
-        return estabelecimento;
-    }
+
 
     public Cartao getCartao() {
         return cartao;
@@ -55,6 +55,10 @@ public class Transacao {
 
     public Double getValorproduto() {
         return valorproduto;
+    }
+
+    public NovoEstabelecimento getEstabelecimento() {
+        return estabelecimento;
     }
 
     public void atualizaEstabelecimento(AtualizaTransacaoRequest atualizar) {

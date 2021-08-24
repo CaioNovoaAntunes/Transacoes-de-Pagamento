@@ -1,4 +1,4 @@
-package br.com.orange.carteira.cartoes;
+package br.com.orange.carteira.cartoes.validacaofeign;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +20,4 @@ public class ValidaCartaoController {
 
         return ResponseEntity.ok().build();
     }
-
-
 }

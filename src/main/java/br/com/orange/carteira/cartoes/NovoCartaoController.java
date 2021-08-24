@@ -21,7 +21,7 @@ public class NovoCartaoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> cadastraCartao(@RequestBody @Valid NovoCartaoRequest request) {
+    public ResponseEntity<NovoCartaoRequest> cadastraCartao(@RequestBody @Valid NovoCartaoRequest request) {
         Cartao possivelCartao = request.paraCartao();
         entityManager.persist(possivelCartao);
         URI uri = ServletUriComponentsBuilder  // gerar uri do recurso que acabou de ser construido//

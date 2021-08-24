@@ -1,4 +1,4 @@
-package br.com.orange.carteira.validador.handler;
+package br.com.orange.carteira.validadores.handler;
 
 import org.springframework.validation.FieldError;
 

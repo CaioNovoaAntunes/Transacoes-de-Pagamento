@@ -1,4 +1,4 @@
-package br.com.orange.carteira.validador.handler;
+package br.com.orange.carteira.validadores.handler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -24,6 +24,8 @@ public class Handler {
                 f -> new Errors(f)).collect(Collectors.toList());
         return ResponseEntity.badRequest().body(erros);
     }
+    // poderia adicionar o feign para diminuir a carga intrinseca da minha controladora
+
 
 
 

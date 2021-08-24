@@ -2,6 +2,7 @@ package br.com.orange.carteira.transacoes;
 
 import br.com.orange.carteira.cartoes.CartaoRepository;
 import br.com.orange.carteira.client.ValidCard;
+import br.com.orange.carteira.estabelecimentos.NovoEstabelecimentoRepository;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,30 +20,31 @@ import java.util.Optional;
 @RequestMapping("/transacao")
 public class TransacaoControlller {
 
-    private  TransacaoRepository transacaoRepository;
+    private TransacaoRepository transacaoRepository;
     private final CartaoRepository cartaoRepository;
+    private final NovoEstabelecimentoRepository novoEstabelecimentoRepository;
     private final ValidCard validCard;
     private final Logger logger = LoggerFactory.getLogger(TransacaoControlller.class);
 
     @Autowired
-    public TransacaoControlller(TransacaoRepository transacaoRepository, CartaoRepository cartaoRepository, ValidCard validCard) {
+    public TransacaoControlller(TransacaoRepository transacaoRepository, CartaoRepository cartaoRepository, NovoEstabelecimentoRepository novoEstabelecimentoRepository, ValidCard validCard) {
         this.transacaoRepository = transacaoRepository;
         this.cartaoRepository = cartaoRepository;
+        this.novoEstabelecimentoRepository = novoEstabelecimentoRepository;
         this.validCard = validCard;
     }
 
     @PostMapping
     @Transactional
     ResponseEntity<?> cadastraTransacao(@RequestBody @Valid TransacaoRequest request) {
-        Transacao transacao = request.paraTransacao(cartaoRepository);
+        Transacao transacao = request.paraTransacao(cartaoRepository, novoEstabelecimentoRepository);
 
-
-        try{
+        try {
             validCard.validarCartao(request.getCartao());
-        }catch(FeignException e){
+        } catch (FeignException e) {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body("erro no Feign");
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body("erro Exception");
         }
@@ -60,17 +62,28 @@ public class TransacaoControlller {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleta(@PathVariable("id") Long id) {
-        transacaoRepository.deleteById(id);
-    return ResponseEntity.ok().build();
-    }
+        Optional<Transacao> transacao = transacaoRepository.findById(id);
+        if (transacao.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
+        transacaoRepository.deleteById(id);
+
+        return ResponseEntity.ok().build();
+
+    }
 
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> atualiza(@PathVariable("id") Long id, @RequestBody AtualizaTransacaoRequest atualizaTransacaoRequest) {
-        Transacao transacao =  transacaoRepository.getOne(id);
+    public ResponseEntity<?> atualizaTransacao(@PathVariable("id") Long id, @RequestBody AtualizaTransacaoRequest atualizaTransacaoRequest) {
+        Optional<Transacao> optionalTransacao = transacaoRepository.findById(id);
 
+        if (optionalTransacao.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Transacao transacao = optionalTransacao.get();
         transacao.atualizaEstabelecimento(atualizaTransacaoRequest);
         transacaoRepository.save(transacao);
         return ResponseEntity.ok().build();

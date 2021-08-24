@@ -1,6 +1,7 @@
 package br.com.orange.carteira.transacoes;
 
 import br.com.orange.carteira.cartoes.Cartao;
+import br.com.orange.carteira.estabelecimentos.NovoEstabelecimento;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 public class BuscaTransacaoResponse {
-    private String estabelecimento;
+    private NovoEstabelecimento estabelecimento;
     private Cartao cartao;
     private Double valorproduto;
 
@@ -19,7 +20,7 @@ public class BuscaTransacaoResponse {
 
     }
 
-    public String getEstabelecimento() {
+    public NovoEstabelecimento getEstabelecimento() {
         return estabelecimento;
     }
 

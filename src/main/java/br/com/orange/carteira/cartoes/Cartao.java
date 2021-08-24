@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "tb_cartao")
 public class Cartao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

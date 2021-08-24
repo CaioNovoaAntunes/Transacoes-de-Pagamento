@@ -1,4 +1,4 @@
-package br.com.orange.carteira.validador;
+package br.com.orange.carteira.validadores.customizado;
 
 import org.springframework.util.Assert;
 
