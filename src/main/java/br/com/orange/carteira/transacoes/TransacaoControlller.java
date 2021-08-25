@@ -7,6 +7,7 @@ import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -41,12 +42,17 @@ public class TransacaoControlller {
 
         try {
             validCard.validarCartao(request.getCartao());
-        } catch (FeignException e) {
+        }
+        catch (FeignException.UnprocessableEntity e){
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body("erro no Feign");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Cartão bloqueado!");
+        }
+        catch (FeignException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("erro no Feign");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body("erro Exception");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("erro Exception"); // tinha que mudar, erro 400 erro do cliente, agora testa
         }
 
         transacaoRepository.save(transacao);
@@ -77,9 +83,9 @@ public class TransacaoControlller {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<?> atualizaTransacao(@PathVariable("id") Long id, @RequestBody AtualizaTransacaoRequest atualizaTransacaoRequest) {
-        Optional<Transacao> optionalTransacao = transacaoRepository.findById(id);
+        Optional<Transacao> optionalTransacao = transacaoRepository.findById(id); // Busca para conseguir atualizar
 
-        if (optionalTransacao.isEmpty()) {
+        if (optionalTransacao.isEmpty()) { // if para verificar se tem algo na base, caso ele não ache devolve
             return ResponseEntity.notFound().build();
         }
 

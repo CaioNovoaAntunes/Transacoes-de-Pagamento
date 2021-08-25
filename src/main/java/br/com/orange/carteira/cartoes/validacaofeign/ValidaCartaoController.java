@@ -1,5 +1,6 @@
 package br.com.orange.carteira.cartoes.validacaofeign;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ public class ValidaCartaoController {
     public ResponseEntity<?> validaCartao(@PathVariable String id) {
 
         if(id.startsWith("3")){
-         throw new RuntimeException("cartao sem saldo");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("cartao bloqueado!");
         }
 
         return ResponseEntity.ok().build();

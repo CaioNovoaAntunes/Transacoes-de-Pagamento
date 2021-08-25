@@ -14,6 +14,9 @@ public class AtualizaTransacaoRequest {
         this.estabelecimento = estabelecimento;
     }
 
+    public void atualizaEstabelecimento(Transacao transacao) {
+        this.estabelecimento = transacao.getEstabelecimento();
+    }
     public NovoEstabelecimento getEstabelecimento() {
         return estabelecimento;
     }

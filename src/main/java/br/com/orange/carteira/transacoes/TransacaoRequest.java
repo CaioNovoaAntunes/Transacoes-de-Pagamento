@@ -11,14 +11,13 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 public class TransacaoRequest {
-
+    @NotBlank
     private Long estabelecimento;
     @CheckIfExist(klazz = Cartao.class  , field = "numeroCartao")
     @NotBlank
     private String cartao;
     @NotNull
     private Double valorproduto;
-
 
     public TransacaoRequest(@NotBlank Long estabelecimento, @NotBlank String cartao, @NotNull Double valorproduto) {
         this.estabelecimento = estabelecimento;

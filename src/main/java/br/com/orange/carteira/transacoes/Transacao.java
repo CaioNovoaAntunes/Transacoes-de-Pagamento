@@ -15,7 +15,6 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     private NovoEstabelecimento estabelecimento;
 
@@ -60,6 +59,7 @@ public class Transacao {
     public NovoEstabelecimento getEstabelecimento() {
         return estabelecimento;
     }
+
 
     public void atualizaEstabelecimento(AtualizaTransacaoRequest atualizar) {
         this.estabelecimento = atualizar.getEstabelecimento();

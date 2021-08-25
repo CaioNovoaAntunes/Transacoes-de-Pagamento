@@ -28,7 +28,4 @@ public class BuscaTransacaoResponse {
         return cartao;
     }
 
-    public Double getValorproduto() {
-        return valorproduto;
-    }
 }

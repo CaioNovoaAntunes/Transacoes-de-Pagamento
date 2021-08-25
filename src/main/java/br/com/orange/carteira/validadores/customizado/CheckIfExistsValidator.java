@@ -33,7 +33,7 @@ public class CheckIfExistsValidator implements ConstraintValidator<CheckIfExist,
                 field + " = :valor")
                 .setParameter("valor", value).getResultList();
 
-        Assert.state(resultList.size() <= 1, "O campo " + field + " tem um valor");
+        Assert.state(resultList.size() <= 1, "O campo " + field + "Objeto não encontrado");
 
         return !resultList.isEmpty();
     }
