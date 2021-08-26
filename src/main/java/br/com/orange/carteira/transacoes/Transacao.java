@@ -3,10 +3,12 @@ package br.com.orange.carteira.transacoes;
 
 import br.com.orange.carteira.cartoes.Cartao;
 import br.com.orange.carteira.estabelecimentos.NovoEstabelecimento;
-import org.hibernate.annotations.CreationTimestamp;
+import br.com.orange.carteira.produtos.Produto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_transacao")
@@ -19,6 +21,10 @@ public class Transacao {
     private NovoEstabelecimento estabelecimento;
 
     @ManyToOne
+    private List<Produto> produto = new ArrayList<>();
+
+
+    @ManyToOne
     private Cartao cartao;
 
     @Column(nullable = false)
@@ -27,8 +33,9 @@ public class Transacao {
     @Column(nullable = false, updatable = false)
     private LocalDateTime instante = LocalDateTime.now();
 
-    public Transacao(NovoEstabelecimento estabelecimento, Cartao cartao, Double valorproduto) {
+    public Transacao(NovoEstabelecimento estabelecimento, List<Produto> produto, Cartao cartao, Double valorproduto) {
         this.estabelecimento = estabelecimento;
+        this.produto = produto;
         this.cartao = cartao;
         this.valorproduto = valorproduto;
     }
@@ -60,6 +67,9 @@ public class Transacao {
         return estabelecimento;
     }
 
+    public List<Produto> getProduto() {
+        return produto;
+    }
 
     public void atualizaEstabelecimento(AtualizaTransacaoRequest atualizar) {
         this.estabelecimento = atualizar.getEstabelecimento();
